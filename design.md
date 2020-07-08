@@ -163,9 +163,12 @@ rampart hits ?
     architect => road []
                  container id pos
 
-
 ## rooms
 
+    structureTask
+
 ## spawns
+
+    creepTask
 
 ## flags

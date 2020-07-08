@@ -170,11 +170,9 @@ const CreepConfig = {
      */
     _build: function (creep) {
         const storages = Game.getObjectById(Memory.roomConfig[creep.room.name].storage.id)
-        let targets;
-        if (!targets) {
-            targets = creep.room.find(FIND_CONSTRUCTION_SITES)
-        }
-        /* 如果有建筑任务就建造 没有就自杀 */
+        targets = creep.room.find(FIND_CONSTRUCTION_SITES)
+
+
         if (!Memory.roomConfig[creep.room.name].war) {
             creep.memory.warStatus = false
         } else {
@@ -182,11 +180,9 @@ const CreepConfig = {
         }
 
         if (!creep.memory.warStatus) {
-            if (targets.length > 0) {
+            if (targets && targets.length > 0) {
                 creep.store[RESOURCE_ENERGY] == 0 ?
                     creep._withdraw(storages, RESOURCE_ENERGY) : creep._build(target[0])
-            } else {
-                targets = null
             }
         }
 
@@ -195,8 +191,10 @@ const CreepConfig = {
                 filter: (s) => s.structureType == STRUCTURE_RAMPART && s.hits <= 1000000
             })
 
-            creep.store[RESOURCE_ENERGY] == 0 ?
-                creep._widthdraw(storages, RESOURCE_ENERGY) : creep._repair(target[0])
+            if (target) {
+                creep.store[RESOURCE_ENERGY] == 0 ?
+                    creep._widthdraw(storages, RESOURCE_ENERGY) : creep._repair(target[0])
+            }
         }
     },
 

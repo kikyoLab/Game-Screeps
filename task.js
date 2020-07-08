@@ -3,49 +3,41 @@ module.exports = {
         for (var name in Game.rooms) {
             var roomName = Game.rooms[name]
             let basicEnergyTask = []
+
             /* extensionTask */
-            let extensions;
-            if (!extensions) {
-                extensions = Game.rooms[roomName].find(FIND_STRUCTURE, {
-                    filter: (s) => s.structureType == STRUCTURE_EXTENSION
-                })
-            }
+            let extensions = Game.rooms[roomName].find(FIND_STRUCTURE, {
+                filter: (s) => s.structureType == STRUCTURE_EXTENSION
+            })
 
             for (var e of extensions) {
-                if (e.store[RESOURCE_ENERGY] < e.getCapacity(RESOURCE_ENERGY)) {
+                if (e.store[RESOURCE_ENERGY] < e.getCapacity(RESOURCE_ENERGY) * 0.5) {
                     basicEnergyTask.push({
                         targetId: e.id,
                         type: RESOURCE_ENERGY,
-                        amount: e.getCapacity(RESOURCE_ENERGY) - e.store[RESOURCE_ENERGY],
+                        amount: e.getCapacity(RESOURCE_ENERGY) * 0.5 - e.store[RESOURCE_ENERGY],
                         priority: 1,
                     })
                 }
             }
 
             /* spawnTask */
-            let spawns;
-            if (!spawns) {
-                spawns = Game.spawns.filter((x) => x.room.name == roomName)
-            }
+            let spawns = Game.spawns.filter((x) => x.room.name == roomName)
 
             for (var s of spawns) {
-                if (s.store[RESOURCE_ENERGY] < s.getCapacity(RESOURCE_ENERGY)) {
+                if (s.store[RESOURCE_ENERGY] < s.getCapacity(RESOURCE_ENERGY) * 0.5) {
                     basicEnergyTask.push({
                         targetId: s.id,
                         type: RESOURCE_ENERGY,
-                        amount: s.getCapacity(RESOURCE_ENERGY) - s.store[RESOURCE_ENERGY],
+                        amount: s.getCapacity(RESOURCE_ENERGY) * 0.5 - s.store[RESOURCE_ENERGY],
                         priority: 0
                     })
                 }
             }
 
             /* towerTask */
-            let towers;
-            if (!towers) {
-                towers = Game.rooms[roomName].find(FIND_STRUCTURES, {
-                    filter: (s) => s.structureType == STRUCTURE_TOWER
-                })
-            }
+            let towers = Game.rooms[roomName].find(FIND_STRUCTURES, {
+                filter: (s) => s.structureType == STRUCTURE_TOWER
+            })
 
             for (var t of towers) {
                 if (t.store[RESOURCE_ENERGY] <= t.getCapacity(RESOURCE_ENERGY) * 0.5) {
@@ -81,12 +73,9 @@ module.exports = {
             /**
              *  labTask 
              */
-            let labs;
-            if (!labs) {
-                labs = Game.rooms[roomName].find(FIND_STRUCTURES, {
-                    filter: (s) => s.structureType == STRUCTURE_LAB
-                })
-            }
+            let labs = Game.rooms[roomName].find(FIND_STRUCTURES, {
+                filter: (s) => s.structureType == STRUCTURE_LAB
+            })
 
             for (var l of labs) {
                 if (l.store[RESOURCE_ENERGY] <= l.getCapacity(RESOURCE_ENERGY) * 0.6) {

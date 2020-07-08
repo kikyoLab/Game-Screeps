@@ -21,15 +21,9 @@ module.exports = {
 
         var state = Memory.lab[roomName].state;
         labs = new Array();
-        var _id = 0;
 
         Memory.lab[roomName]['labs'].forEach(labid => {
             labs.push(Game.getObjectById(labid))
-
-            //如不需要绘制编号，这句也可以删了
-            new RoomVisual(roomName).text(_id, labs[_id].pos, { color: 'white', font: 0.5 })
-
-            _id++;
         });
 
         needs = new Array();
