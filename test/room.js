@@ -132,11 +132,4 @@ module.exports = {
             });
         }
     },
-
-    _searchRoomStatus: function (roomName) {
-        let structures = Game.rooms[roomName].find(FIND_CONSTRUCTION_SITES)
-        if (structures) {
-
-        }
-    }
 }

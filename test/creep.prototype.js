@@ -27,11 +27,8 @@ const STORAGE = STRUCTURE_STORAGE
 const TERMINAL = STRUCTURE_TERMINAL
 const WALL = STRUCTURE_WALL
 const RAMPART = STRUCTURE_RAMPART
-const FACTORY = STRUCTURE_FACTORY
-const LAB = STRUCTURE_LAB
-const POWER_SPAWN = STRUCTURE_POWER_SPAWN
 
-
+// senior 
 Creep.prototype._getEnergy = function () {
     if (!this.memory.harvestId) {
         let sources = this.room.find(FIND_SOURCES)
@@ -74,15 +71,39 @@ Creep.prototype._getEnergy = function () {
     }
 }
 
+Creep.prototype._getMineral = function (initRoom, taskRoom, taskType) {
+    this.room.name == taskRoom ? this._harvestMineral(initRoom, taskRoom, taskType) : this.moveTo(taskRoom)
+}
+
+Creep.prototype._harvestMineral = function (initRoom, taskType) {
+    let target, storages
+    if (!target) {
+        target = this.room.find(FIND_MINERALS, {
+            filter: (s) => s.resourceType == taskType
+        })[0]
+    }
+
+    if (!storages) {
+        storages = Game.rooms[initRoom].find(FIND_STRUCTURES, {
+            filter: (s) => s.structureType == TERMINAL
+        })
+    }
+
+    this.pos.isNearTo(target) ? this.harvest(target, taskType) : this.moveTo(target)
+
+    this.store[taskType] == this.store.getCapacity() ?
+        this._transfer(storages, taskType) : this._harvest(target, taskType)
+}
+
 Creep.prototype._fillEnergy = function () {
     let fillTargets;
     if (!fillTargets && Game.time % 5 == 0) {
         fillTargets = this.room.find(FIND_STRUCTURES, {
             filter: (s) => {
                 return (
-                    s.structureType == SPAWN && s.store[E] < 300 ||
+                    s.structureType == SPAWN && s.store[E] < s.store.getCapacity() ||
                     s.structureType == EXTENSION && s.store[E] < s.store.getCapacity() ||
-                    s.structureType == TOWER && s.store[E] < 600
+                    s.structureType == TOWER && s.store[E] < s.store.getCapacity() * 0.6
                 )
             }
         })
@@ -238,7 +259,7 @@ Creep.prototype._transferEnergy = function () {
     }
 }
 
-
+// basis
 Creep.prototype._harvest = function (target, type) {
     if (this.harvest(target, type) == r) {
         this.moveTo(target)
@@ -280,3 +301,4 @@ Creep.prototype._upgradeController = function (target) {
         this.moveTo(target)
     }
 }
+
