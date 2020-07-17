@@ -1,3 +1,5 @@
+const { link } = require("fs")
+
 // energy type
 const E = RESOURCE_ENERGY
 const P = RESOURCE_POWER
@@ -67,6 +69,7 @@ Creep.prototype._getEnergy = function () {
         }
         else {
             this.say('能量储存设施故障')
+            Game.rooms[this.room.name].createConstructionSite(this.pos, STRUCTURE_LINK)
         }
     }
 }
@@ -97,7 +100,7 @@ Creep.prototype._harvestMineral = function (initRoom, taskType) {
 
 Creep.prototype._fillEnergy = function () {
     let fillTargets;
-    if (!fillTargets && Game.time % 5 == 0) {
+    if (!fillTargets && Game.time % 10 == 0) {
         fillTargets = this.room.find(FIND_STRUCTURES, {
             filter: (s) => {
                 return (
@@ -181,12 +184,13 @@ Creep.prototype._upController = function () {
     }
     else if (containers) {
         this.store[E] == 0 ? this._withdraw(containers, E) : this._upgradeController(up)
+    } else {
+        this.say('升级设施故障')
+        Game.rooms[this.room.name].createConstructionSite(this.pos, STRUCTURE_LINK)
     }
 }
 
 Creep.prototype._buildStructure = function () {
-    this.store[r] == 0 ? this.memory.status = false : this.memory.status = true
-
     if (!this.memory.storageId) {
         let target = this.room.find(FIND_STRUCTURES, {
             filter: (s) => s.structureType == STORAGE
@@ -248,7 +252,7 @@ Creep.prototype._transferEnergy = function () {
     let container0 = Game.getObjectById(this.memory.container0Id)
     let container1 = Game.getObjectById(this.memory.container1Id)
     let container2 = Game.getObjectById(this.memory.container2Id)
-    if (links) {
+    if (links && links.store[RESOURCE_ENERGY] >= link.store.getCapacity() * 0.4) {
         this.store[E] == 0 ? this._withdraw(links, E) : this._transfer(storages, E)
     }
     else if (container1 && container2 && container1.store[E] >= 400) {

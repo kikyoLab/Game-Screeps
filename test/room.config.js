@@ -13,7 +13,7 @@ module.exports = {
                     }
                 },
                 upgrader: {
-                    count: 4,
+                    count: 1,
                 },
                 filler: {
                     count: 1
