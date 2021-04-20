@@ -11,7 +11,11 @@ else if (!(config = require("./.secret.json")[process.env.DEST])) {
     throw new Error("无效目标，请检查 secret.json 中是否包含对应配置")
 }
 
+<<<<<<< HEAD
 // 根据指定的配置决定是上传还是复制到文件夹
+=======
+/* 根据指定的配置决定是上传还是复制到文件夹 */
+>>>>>>> 8cb3f662682ca88441a85348890af0f8d0a37bab
 const pluginDeploy = config && config.copyPath ?
     /* 复制到指定路径 */
     copy({
@@ -41,6 +45,10 @@ export default {
         sourcemap: true
     },
     plugins: [
+<<<<<<< HEAD
+=======
+        /* 清除上次编译成果 */
+>>>>>>> 8cb3f662682ca88441a85348890af0f8d0a37bab
         clear({ targets: ["dist"] }),
         /* 打包依赖 */
         resolve(),
