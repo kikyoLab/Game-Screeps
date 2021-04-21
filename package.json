@@ -1,18 +1,10 @@
 {
-<<<<<<< HEAD
     "name": "screeps",
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
     "dependencies": {
         "lodash": "^4.17.21",
-=======
-    "name": "screeps-bot",
-    "version": "1.0.0",
-    "description": "a game bot for screeps by kikyo",
-    "main": "main.js",
-    "dependencies": {
->>>>>>> 8cb3f662682ca88441a85348890af0f8d0a37bab
         "source-map": "^0.6.1"
     },
     "devDependencies": {
@@ -32,10 +24,6 @@
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [],
-<<<<<<< HEAD
     "author": "Kikyo",
-=======
-    "author": "kikyo",
->>>>>>> 8cb3f662682ca88441a85348890af0f8d0a37bab
     "license": "ISC"
 }

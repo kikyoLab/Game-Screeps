@@ -1,10 +1,6 @@
 {
     "main": {
-<<<<<<< HEAD
-        "token": "你的 screeps token 填在这里",
-=======
         "token": "3ed30688-d087-42a1-8d36-ce965163a730",
->>>>>>> 8cb3f662682ca88441a85348890af0f8d0a37bab
         "protocol": "https",
         "hostname": "screeps.com",
         "port": 443,
