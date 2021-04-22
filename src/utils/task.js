@@ -1,43 +1,5 @@
-/* 找到该房间内空闲的spawn */
-export function getAvaliableSpawn (roomName) {
-    for (let spawnName in Game.spawns) {
-        let spawn = Game.spawns[spawnName]
-        if (spawn.room.name == roomName && spawn.spawning == null) {
-            return spawn
-        }
-    }
-    return null;
-}
-/* 将二维数组展开得到 body部件 */
-export function getBodyParts (partsArray) {
-    let parts = [];
-    for (let i in partsArray) {
-        let item = partsArray[i];
-        for (let j = 0; j < item[1]; j++) {
-            parts.push(item[0]);
-        }
-    }
-    return parts;
-}
-/* creep自毁处理 */
-export function deathPrepare (creep, sourceId) {
-    /* 如果还有能量 */
-    if (creep.store.getUsedCapacity() > 0) {
-        for (const resourceType in creep.store) {
-            let target
-            /* 不是能量就放 terminal里 */
-            if (resourceType != RESOURCE_ENERGY && resourceType != RESOURCE_POWER && creep.room.terminal) {
-                target = creep.room.terminal
-            }
-            /* 否则就放到 storage或指定的地方 */
-            else
-                target = sourceId ? Game.getObjectById(sourceId) : creep.room.storage
-        }
-    }
-    else
-        creep.suicide()
-    return false
-}
+import clearCarryingEnergy from './creepRelated';
+
 /* 获取指定房间的物流任务 */
 export function getRoomTransferTask (room) {
     const task = room.getRoomTransferTask()
@@ -51,38 +13,7 @@ export function getRoomTransferTask (room) {
     }
     return task;
 }
-/* 获取还没有清空的 lab */
-export function getNotClearLab (labMemory) {
-    for (const outLabId in labMemory.outLab) {
-        if (labMemory.outLab[outLabId] > 0) {
-            return Game.getObjectById(outLabId);
-        }
-    }
-    /* 找不到的话就检查下 inLab是否净空 */
-    for (const labId of labMemory.inLab) {
-        /* 获取 inLab */
-        const inLab = Game.getObjectById(labId);
-        /* manager并非 lab集群内部成员，所以不会对 inLab的缺失做出响应 */
-        if (!inLab)
-            continue;
-        /* 如果有剩余资源的话就拿出来 */
-        if (inLab.mineralType)
-            return inLab;
-    }
-    return undefined;
-}
-/* 处理掉 creep身上携带的能量 */
-export function clearCarryingEnergy (creep) {
-    if (creep.store[RESOURCE_ENERGY] > 0) {
-        /* 能放下就放，放不下直接扔掉 */
-        if (creep.room.storage && creep.room.storage.store.getFreeCapacity() >= creep.store[RESOURCE_ENERGY])
-            creep.transferTo(creep.room.storage, RESOURCE_ENERGY);
-        else
-            creep.drop(RESOURCE_ENERGY);
-        return false;
-    }
-    return true;
-}
+
 /* 运输机在不同类型任务时执行的操作 */
 export const transferTaskOperations = {
     /* extension 填充任务 */
